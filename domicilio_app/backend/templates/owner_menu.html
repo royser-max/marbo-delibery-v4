@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Menú de Alimentos (Dueño)</title>
+</head>
+<body>
+    <h2>Menú de Alimentos</h2>
+    <script>
+      setInterval(() => location.reload(), 5000);
+    </script>
+    <table border="1">
+        <tr><th>Nombre</th><th>Precio</th><th>Imagen</th><th>Acciones</th></tr>
+        {% for food in foods %}
+        <tr>
+            <td>{{ food.name }}</td>
+            <td>${{ food.price }}</td>
+            <td>
+                {% if food.image_path %}
+                    <img src="/{{ food.image_path }}" alt="Imagen" width="80" height="80">
+                {% else %}
+                    Sin imagen
+                {% endif %}
+            </td>
+            <td>
+                <form method="POST" action="/owner/delete_food/{{ food.id }}" style="display:inline;">
+                    <button type="submit" onclick="return confirm('¿Eliminar este alimento?')">Eliminar</button>
+                </form>
+                <a href="/owner/edit_food/{{ food.id }}">Editar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="/owner">Volver al panel</a>
+</body>
+</html>

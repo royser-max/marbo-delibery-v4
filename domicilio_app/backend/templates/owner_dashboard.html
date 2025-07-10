@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Dueño</title>
+</head>
+<body>
+    <h2>Panel de Dueño</h2>
+    <script>
+      // Recarga la página cada 5 segundos para simular tiempo real
+      setInterval(() => location.reload(), 5000);
+    </script>
+    <a href="/owner/menu">Ver/Editar Menú de Alimentos</a>
+    <h3>Agregar alimento</h3>
+    <form method="POST" enctype="multipart/form-data" action="/owner/add_food">
+        <label>Nombre:</label><input type="text" name="name" required><br>
+        <label>Precio:</label><input type="number" name="price" step="0.01" required><br>
+        <label>Imagen:</label><input type="file" name="image"><br>
+        <button type="submit">Agregar</button>
+    </form>
+    <h3>Pedidos recibidos</h3>
+    <table border="1">
+        <tr><th>Cliente</th><th>Dirección</th><th>Descripción</th><th>Total</th><th>Status</th><th>Acción</th></tr>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.customer_name }}</td>
+            <td>{{ order.address }}</td>
+            <td>{{ order.description }}</td>
+            <td>${{ order.total }}</td>
+            <td>{{ order.status }}</td>
+            <td>
+                {% if order.status != 'completado' %}
+                <form method="POST" action="/owner/complete_order/{{ order.id }}">
+                    <button type="submit">Completar</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h3>Ventas del día: ${{ daily_total }}</h3>
+    <form method="POST" action="/owner/reset_day">
+        <button type="submit">Reiniciar Día</button>
+    </form>
+    <h3>Historial de ganancias</h3>
+    <ul>
+        {% for day, amount in history.items() %}
+        <li>{{ day }}: ${{ amount }}</li>
+        {% endfor %}
+    </ul>
+    <form method="POST" action="/owner/reset_year">
+        <button type="submit" style="background:red;color:white;">Reiniciar Año</button>
+    </form>
+</body>
+</html>
