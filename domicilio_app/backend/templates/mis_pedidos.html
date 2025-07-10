@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Pedidos</title>
+</head>
+<body>
+    <h2>Mis Pedidos Activos</h2>
+    <script>
+      setInterval(() => location.reload(), 5000);
+    </script>
+    {% if pedidos %}
+        {% for p in pedidos %}
+            <div style="border:1px solid #ccc; margin-bottom:10px; padding:10px;">
+                <strong>Dirección:</strong> {{ p.pedido.address }}<br>
+                <strong>Descripción:</strong> {{ p.pedido.description }}<br>
+                <strong>Nombre del pedido:</strong> {{ p.pedido.customer_name }}<br>
+                <strong>Estado:</strong> {{ p.pedido.status }}<br>
+                <table border="1">
+                    <tr><th>Alimento</th><th>Cantidad</th><th>Precio unitario</th><th>Subtotal</th></tr>
+                    {% for item in p.detalle %}
+                    <tr>
+                        <td>{{ item.nombre }}</td>
+                        <td>{{ item.cantidad }}</td>
+                        <td>${{ item.precio }}</td>
+                        <td>${{ item.precio * item.cantidad }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <strong>Total a pagar:</strong> ${{ p.pedido.total }}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No tienes pedidos activos.</p>
+    {% endif %}
+    <a href="/menu">Volver al menú</a>
+</body>
+</html>
